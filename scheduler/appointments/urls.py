@@ -1,8 +1,8 @@
 from django.contrib import admin
 from django.urls import path
-from .views import Appointment, AppointmentParameters
+from .views import AppointmentView, AppointmentParametersView
 
 urlpatterns = [
-    path('', Appointment.as_view(), name='new_appointments'),
-    path('<slug:id>', AppointmentParameters.as_view(), name='existing_appointments'),
+    path('', AppointmentView.as_view(), name='new_appointments'),
+    path('<slug:id>', AppointmentParametersView.as_view(), name='existing_appointments'),
 ]
