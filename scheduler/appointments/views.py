@@ -1,11 +1,12 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework.generics import GenericAPIView
 from drf_yasg.utils import swagger_auto_schema
-from .serializers import AppointmentSerializer
+from .serializers import AppointmentSerializer, MeetingRoomSerializer
 from .responses import *
 from django.http import JsonResponse
-from .models import Appointment
+from .models import Appointment, MeetingRoom
 import json
+from sentry_sdk import capture_exception
 
 # Create your views here.
 
@@ -30,17 +31,21 @@ class AppointmentView(BaseClass):
         operation_description='Endpoint to fetch appointments',
         responses=get_response
         )
-    def get(self):
-        qs_appointments = (
-            Appointment.objects.filter(deleted_at=None).order_by('start_time')
-            )
-        serialized_appointments = AppointmentSerializer(
-            qs_appointments,
-            many=True
-            )
-        response = self.build_response(serialized_appointments.data, 200)
-
-        return JsonResponse(response)
+    def get(self, request):
+        try:
+            qs_appointments = (
+                Appointment.objects.filter(deleted_at=None).order_by('start_time')
+                )
+            serialized_appointments = AppointmentSerializer(
+                qs_appointments,
+                many=True
+                )
+            response = self.build_response(serialized_appointments.data, 200)
+        except Exception as exc:
+            capture_exception(exc)
+            response = self.build_response([], 500, serialized_appointments.errors)
+        else:
+            return JsonResponse(response)
 
     @swagger_auto_schema(
         operation_description='Endpoint to create a new appointment',
@@ -50,8 +55,11 @@ class AppointmentView(BaseClass):
     def post(self, request):
         json_request = json.loads(request.body.decode('utf-8'))
         serializer = AppointmentSerializer(data=json_request)
-
-        response = self.build_response('No errors', 200)
+        if serializer.is_valid():
+            serializer.save()
+            response = self.build_response(serializer.data, 200)
+        else:
+            response = self.build_response([], 400, serializer.errors)
         return JsonResponse(response)
 
 

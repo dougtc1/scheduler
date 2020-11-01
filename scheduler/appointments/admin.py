@@ -39,6 +39,15 @@ class AmenityAdmin(admin.ModelAdmin):
         'description',
     )
 
+class Appointment_ParticipantAdmin(admin.ModelAdmin):
+    list_display = (
+        'id',
+        'appointment',
+        'user',
+        'deleted_at'
+    )
+
 admin.site.register(Appointment, AppointmentAdmin)
 admin.site.register(MeetingRoom, MeetingRoomAdmin)
 admin.site.register(Amenity, AmenityAdmin)
+admin.site.register(Appointment_Participant, Appointment_ParticipantAdmin)

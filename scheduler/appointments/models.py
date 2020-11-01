@@ -44,6 +44,9 @@ class MeetingRoom(models.Model):
     #amenities = models.ManyToManyField(Amenity)
 
 class Appointment(models.Model):
+    class Meta:
+        unique_together = ('start_time','end_time')
+
     def __str__(self):
         return str(self.subject)
 
@@ -56,7 +59,7 @@ class Appointment(models.Model):
     subject = models.CharField(max_length=128)
     start_time = models.DateTimeField('Start time')
     end_time = models.DateTimeField('End time')
-    location = models.OneToOneField(
+    location = models.ForeignKey(
         MeetingRoom,
         on_delete=models.PROTECT
         )
@@ -73,9 +76,6 @@ class Appointment(models.Model):
         )
 
 class Appointment_Participant(models.Model):
-    class Meta:
-        unique_together = ('appointment', 'user')
-
     def __str__(self):
         return str(self.id)
 
@@ -88,7 +88,7 @@ class Appointment_Participant(models.Model):
     appointment = models.ForeignKey(Appointment, on_delete=models.PROTECT)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     deleted_at = models.DateTimeField(
-        'Time of deletion',
+        'Time of participant deletion',
         default=None,
         null=True
         )
