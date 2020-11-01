@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 class AmenitySerializer(serializers.ModelSerializer):
     class Meta:
         model = Amenity
-        fields = ['name', 'description']
+        fields = ['id', 'name', 'description']
     
     id = serializers.UUIDField(required=False)
     name = serializers.CharField(max_length=128)
@@ -48,18 +48,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_location = validated_data.pop('location')
         validated_participants = validated_data.pop('participants')
-
         location_name = validated_location.get('name')
         location = get_object_or_404(MeetingRoom, name=location_name)
         appointment = Appointment.objects.create(location=location, **validated_data)
-        
         username_list = [i.get('username') for i in validated_participants]
-        print('usernames', username_list)
-
         participants = User.objects.filter(username__in=username_list)
-        print('participants', participants)
         appointment.participants.set(participants)
-        print('id',appointment.id)
         return appointment
 
     def update(self, instance, validated_data):
