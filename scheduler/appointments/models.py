@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 class Amenity(models.Model):
+    class Meta:
+        verbose_name_plural = 'Amenities'
+
     def __str__(self):
         return str(self.name)
 
@@ -22,7 +25,7 @@ class Amenity(models.Model):
         db_index=True,
         editable=False
     )
-    name = models.CharField(choices=NAMES, max_length=32)
+    name = models.CharField(choices=NAMES, max_length=32, unique=True)
     description = models.CharField(max_length=128)
 
 class MeetingRoom(models.Model):
@@ -35,7 +38,7 @@ class MeetingRoom(models.Model):
         db_index=True,
         editable=False
     )
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
     maximum_occupancy = models.PositiveIntegerField()
     cost_per_hour = models.PositiveIntegerField()
     #amenities = models.ManyToManyField(Amenity)
@@ -57,7 +60,33 @@ class Appointment(models.Model):
         MeetingRoom,
         on_delete=models.PROTECT
         )
-    participants = models.ManyToManyField(User, blank=True)
+    participants = models.ManyToManyField(
+        User,
+        through='Appointment_Participant',
+        through_fields=('appointment','user'),
+        blank=True
+        )
+    deleted_at = models.DateTimeField(
+        'Time of deletion',
+        default=None,
+        null=True
+        )
+
+class Appointment_Participant(models.Model):
+    class Meta:
+        unique_together = ('appointment', 'user')
+
+    def __str__(self):
+        return str(self.id)
+
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        db_index=True,
+        editable=False
+        )
+    appointment = models.ForeignKey(Appointment, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
     deleted_at = models.DateTimeField(
         'Time of deletion',
         default=None,
