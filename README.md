@@ -40,6 +40,5 @@ If you have a PostgreSQL database server or another webserver running in your co
 To solve this, make sure you stop the running services first before executing `docker-compose`
 
 ## To Do
-* Create volume for postgresql DB
-* Create commands to initialize DB and execute list endpoint
+* Create command to execute list endpoint
 * Create tests (pytest, bamboo, etc)
