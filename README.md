@@ -5,11 +5,11 @@ Small appointment management app
 
 ## How to run the project?
 To run a project you need to have the following prerequisites:
-    - Docker engine (CE) version 19.03 or later installed for your OS.
-    - docker-compose version 1.26  or later installed 
-    - Source code
-    - Docker configured to be used without sudo (Optional, in case your user does not belong to Docker group, you will need to add `sudo` in front of every `docker` command)
-    - Postman version v7.34.0 (Optional, only needed to import collection and environment)
+* Docker engine (CE) version 19.03 or later installed for your OS.
+* docker-compose version 1.26  or later installed 
+* Source code
+* Docker configured to be used without sudo (Optional, in case your user does not belong to Docker group, you will need to add `sudo` in front of every `docker` command)
+* Postman version v7.34.0 (Optional, only needed to import collection and environment)
 
 After cloning the project repository (or unzipping the source code), you should see a folder called `scheduler` and this README.md.
 
