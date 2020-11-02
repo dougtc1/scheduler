@@ -76,6 +76,14 @@ class Appointment(models.Model):
         )
 
 class Appointment_Participant(models.Model):
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['appointment', 'user'],
+                name='unique appversion'
+                )
+            ]
+
     def __str__(self):
         return str(self.id)
 
