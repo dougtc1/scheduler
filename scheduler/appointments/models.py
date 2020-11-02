@@ -3,31 +3,6 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
-class Amenity(models.Model):
-    class Meta:
-        verbose_name_plural = 'Amenities'
-
-    def __str__(self):
-        return str(self.name)
-
-    NAMES = (
-        ('projector', 'projector'),
-        ('tv', 'tv'),
-        ('whiteboard', 'whiteboard'),
-        ('speakers', 'speakers'),
-        ('phone', 'phone'),
-        ('air_conditioning', 'air conditioning')
-    )
-
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        db_index=True,
-        editable=False
-    )
-    name = models.CharField(choices=NAMES, max_length=32, unique=True)
-    description = models.CharField(max_length=128)
-
 class MeetingRoom(models.Model):
     def __str__(self):
         return str(self.name)
@@ -41,7 +16,6 @@ class MeetingRoom(models.Model):
     name = models.CharField(max_length=64, unique=True)
     maximum_occupancy = models.PositiveIntegerField()
     cost_per_hour = models.PositiveIntegerField()
-    #amenities = models.ManyToManyField(Amenity)
 
 class Appointment(models.Model):
     class Meta:

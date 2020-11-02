@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
-from .models import Appointment, MeetingRoom, Amenity
+from .models import Appointment, MeetingRoom
 from django.shortcuts import get_object_or_404
 
 class UserSerializer(serializers.ModelSerializer):
@@ -12,15 +12,6 @@ class UserSerializer(serializers.ModelSerializer):
     last_name = serializers.CharField(max_length=150, required=False)
     email = serializers.EmailField(required=False)
     username = serializers.CharField(max_length=150)
-
-class AmenitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Amenity
-        fields = ['id', 'name', 'description']
-    
-    id = serializers.UUIDField(required=False)
-    name = serializers.CharField(max_length=128)
-    description = serializers.CharField(max_length=128)
 
 class MeetingRoomSerializer(serializers.ModelSerializer):
     class Meta:
