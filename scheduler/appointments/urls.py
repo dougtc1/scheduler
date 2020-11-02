@@ -4,5 +4,5 @@ from .views import AppointmentView, AppointmentParametersView
 
 urlpatterns = [
     path('', AppointmentView.as_view(), name='new_appointments'),
-    path('<slug:id>', AppointmentParametersView.as_view(), name='existing_appointments'),
+    path('<str:id>/', AppointmentParametersView.as_view(), name='existing_appointments'),
 ]

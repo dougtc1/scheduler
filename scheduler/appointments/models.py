@@ -45,7 +45,7 @@ class MeetingRoom(models.Model):
 
 class Appointment(models.Model):
     class Meta:
-        unique_together = ('start_time','end_time')
+        unique_together = ('subject', 'start_time','end_time')
 
     def __str__(self):
         return str(self.subject)

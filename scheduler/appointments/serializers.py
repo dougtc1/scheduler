@@ -8,9 +8,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['first_name', 'last_name', 'email', 'username']
 
-    first_name = serializers.CharField(max_length=150)
-    last_name = serializers.CharField(max_length=150)
-    email = serializers.EmailField()
+    first_name = serializers.CharField(max_length=150, required=False)
+    last_name = serializers.CharField(max_length=150, required=False)
+    email = serializers.EmailField(required=False)
     username = serializers.CharField(max_length=150)
 
 class AmenitySerializer(serializers.ModelSerializer):
@@ -43,11 +43,12 @@ class AppointmentSerializer(serializers.ModelSerializer):
     end_time = serializers.DateTimeField()
     location = MeetingRoomSerializer()
     participants = UserSerializer(many=True)
-    deleted_at = serializers.DateTimeField(required=False)
+    deleted_at = serializers.DateTimeField(required=False, allow_null=True)
 
     def create(self, validated_data):
         validated_location = validated_data.pop('location')
         validated_participants = validated_data.pop('participants')
+        
         location_name = validated_location.get('name')
         location = get_object_or_404(MeetingRoom, name=location_name)
         appointment = Appointment.objects.create(location=location, **validated_data)
@@ -57,10 +58,19 @@ class AppointmentSerializer(serializers.ModelSerializer):
         return appointment
 
     def update(self, instance, validated_data):
+        validated_location = validated_data.pop('location')
+        validated_participants = validated_data.pop('participants')
+
+        location = instance.location
+        participants = instance.participants
+
         instance.subject = validated_data.get('subject', instance.subject)
         instance.start_time = validated_data.get('start_time', instance.start_time)
         instance.end_time = validated_data.get('end_time', instance.end_time)
-        instance.location = validated_data.get('location', instance.location)
-        instance.participants = validated_data.get('participants', instance.participants)
+        instance.deleted_at = validated_data.get('deleted_at', instance.deleted_at)
+        
+        location = validated_location.get('location', location)
+        participants = validated_participants.get('participants', participants)
         instance.save()
+        
         return instance
