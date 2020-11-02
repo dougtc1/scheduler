@@ -1,0 +1,121 @@
+{
+	"info": {
+		"_postman_id": "db917110-e8dc-41c6-ae8b-059a98dd5209",
+		"name": "appointments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "list_appointments",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/appointment/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"appointment",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get_appointment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/appointment/{{id}}/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"appointment",
+						"{{id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create_appointment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"subject\": \"test appointment\",\n    \"start_time\": \"2020-11-04 01:00:00\",\n    \"end_time\": \"2020-11-05 04:00:00\",\n    \"location\": {\n        \"name\": \"Leahton\"\n    },\n    \"participants\": [\n        {\n            \"username\":\"rickbrown\"\n        },\n        {\n            \"username\": \"kiddcourtney\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/appointment/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"appointment",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update_appointment",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"subject\": \"Updated subject\",\n    \"start_time\": \"2020-11-07 01:00:00\",\n    \"end_time\": \"2020-11-07 03:00:00\",\n    \"location\": {\n        \"name\": \"Leahton\"\n    },\n    \"participants\": [\n        {\n            \"username\":\"rickbrown\"\n        },\n        {\n            \"username\": \"kiddcourtney\"\n        }\n    ],\n    \"deleted_at\": null\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/appointment/{{id}}/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"appointment",
+						"{{id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete_appointment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/appointment/{{id}}/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"appointment",
+						"{{id}}",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
