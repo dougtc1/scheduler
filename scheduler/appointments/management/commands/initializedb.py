@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
-from appointments.models import Appointment, MeetingRoom, Amenity, Appointment_Participant
+from django.core.management.base import BaseCommand
+from appointments.models import Appointment, MeetingRoom
 from django.contrib.auth.models import User
 from faker import Faker
 from datetime import timezone
@@ -8,7 +8,7 @@ fake = Faker()
 Faker.seed(4321)
 
 class Command(BaseCommand):
-    help = 'Initializes DB for the project'
+    help = 'Command to initialize the DB for the project'
 
     def print_user_information(self, user):
         output = 'First name: ' + user.first_name\
@@ -25,9 +25,7 @@ class Command(BaseCommand):
 
         return output
 
-    def print_appointment_information(
-        self, appointment, participant_1, participant_2
-        ):
+    def print_appointment_information(self, appointment):
 
         output = 'Subject: ' + str(appointment)\
             + ' | Start_time: ' + appointment.start_time.isoformat()\
@@ -35,9 +33,7 @@ class Command(BaseCommand):
             + ' | Location: ' + self.print_meeting_room_information(
                 appointment.location
                 )\
-            + ' | \n Participants: [' + self.print_user_information(participant_1)\
-            + ',' + self.print_user_information(participant_2)\
-            + ']'
+            + ' | \n Participants: ' + str(appointment.participants.all().values('username'))
 
         return output
 
@@ -76,22 +72,10 @@ class Command(BaseCommand):
                 end_time=fake.unique.date_time_this_year(tzinfo=timezone.utc),
                 location=meeting_rooms[i],
             )
-            # First participant
-            participant_1 = Appointment_Participant.objects.create(
-                appointment=appointment,
-                user=users[i]
-                )
 
-            # Second participant
-            participant_2 = Appointment_Participant.objects.create(
-                appointment=appointment,
-                user=users[i+1]
-                )
-
+            appointment.participants.set([users[i], users[i+1]])
             self.stdout.write(
                 self.print_appointment_information(
-                    appointment,
-                    participant_1.user,
-                    participant_2.user
+                    appointment
                     )
                 )
