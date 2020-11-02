@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Appointment, MeetingRoom, Amenity, Appointment_Participant
+from .models import Appointment, MeetingRoom, Appointment_Participant
 from django.contrib.auth.models import User
 
 # Register your models here.
@@ -31,14 +31,6 @@ class MeetingRoomAdmin(admin.ModelAdmin):
         'cost_per_hour',
         )
 
-class AmenityAdmin(admin.ModelAdmin):
-    readonly_fields = ['id']
-    list_display = (
-        'id',
-        'name',
-        'description',
-    )
-
 class Appointment_ParticipantAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -49,5 +41,4 @@ class Appointment_ParticipantAdmin(admin.ModelAdmin):
 
 admin.site.register(Appointment, AppointmentAdmin)
 admin.site.register(MeetingRoom, MeetingRoomAdmin)
-admin.site.register(Amenity, AmenityAdmin)
 admin.site.register(Appointment_Participant, Appointment_ParticipantAdmin)
