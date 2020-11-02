@@ -2,7 +2,7 @@ version: "3.8"
    
 services:
   db:
-    image: postgres
+    image: postgres:12
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -11,7 +11,7 @@ services:
       - dbdata:/var/lib/postgresql/data
   web:
     build: .
-    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py initializedb && python manage.py test && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
